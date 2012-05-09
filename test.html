@@ -101,6 +101,28 @@
 	</script>
       </li>
 
+     <li>
+	<div id="test6">
+	  <strong>Failed</strong>
+	</div>
+	<script type="text/javascript">
+	  //Testing mult basis
+	  test6 = Object.create(Mult);
+	  test6.left = Object.create(Plus);
+	  test6.right = Object.create(Mult);
+	  test6.left.left = makeNumber(2);
+	  test6.left.right = makeNumber(7);
+	  test6.right.left = makeNumber(3);
+	  test6.right.right = makeNumber(5);
+	 
+	  if(test6.toString() === "( 2 + 7 ) * 3 * 5") {
+	      document.getElementById("test6").innerHTML = "Passed";
+	  } else {
+	      document.getElementById("test6").innerHTML += test6.toString();
+	  };
+	</script>
+      </li>
+
     </ol>
     
   </body>
