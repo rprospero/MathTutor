@@ -1,0 +1,44 @@
+<html>
+  <head xmlns="http://www.w3.org/1999/xhtml" lang="en">
+    <script src="model.js" type="text/javascript">
+    </script>
+  </head>
+  <body>
+
+    <ol>
+      <li>
+	<div id="test1">
+	  <strong>Failed</strong>
+	</div>
+	<script type="text/javascript">
+	  test1 = Object.create(Plus);
+	  test1.left = Object.create(Plus);
+	  if(test1.combine().node === test1 &&
+	     test1.combine().success === false) {
+	      document.getElementById("test1").innerHTML = "Passed";
+	  };
+	</script>
+      </li>
+      <li>
+	<div id="test2">
+	  <strong>Failed</strong>
+	</div>
+	<script type="text/javascript">
+	  //Testing plus basis
+	  test2 = Object.create(Plus);
+	  test2.left = Object.create(Number);
+	  test2.right = Object.create(Number);
+	  test2.left.value = 2;
+	  test2.right.value = 3;
+	 
+	  if(test2.combine().node !== test2 &&
+   	     test2.combine().success === true &&
+	     test2.combine().node.value === 5) {
+	      document.getElementById("test2").innerHTML = "Passed";
+	  };
+	</script>
+      </li>
+    </ol>
+    
+  </body>
+</html>
