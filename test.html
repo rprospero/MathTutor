@@ -38,6 +38,47 @@
 	  };
 	</script>
       </li>
+      <li>
+	<div id="test3">
+	  <strong>Failed</strong>
+	</div>
+	<script type="text/javascript">
+	  //Testing mult basis
+	  test3 = Object.create(Mult);
+	  test3.left = Object.create(Number);
+	  test3.right = Object.create(Number);
+	  test3.left.value = 2;
+	  test3.right.value = 3;
+	 
+	  if(test3.combine().node !== test3 &&
+   	     test3.combine().success === true &&
+	     test3.combine().node.value === 6) {
+	      document.getElementById("test3").innerHTML = "Passed";
+	  };
+	</script>
+      </li>
+
+      <li>
+	<div id="test4">
+	  <strong>Failed</strong>
+	</div>
+	<script type="text/javascript">
+	  //Testing mult basis
+	  test4 = Object.create(Mult);
+	  test4.left = Object.create(Number);
+	  test4.right = Object.create(Number);
+	  test4.left.value = 2;
+	  test4.right.value = 3;
+	 
+	  if(test4.combine().success &&
+	  test4.toString() == "2 * 3") {
+	      document.getElementById("test4").innerHTML = "Passed";
+	  } else {
+	      document.getElementById("test4").innerHTML += test4.toString();
+	  };
+	</script>
+      </li>
+
     </ol>
     
   </body>
