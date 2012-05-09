@@ -10,6 +10,8 @@ if (typeof Object.create !== 'function') {
     };
 }
 
+var FONTATTRS = {"font-size":45,fill:"#000"};
+
 var Base = {type: "Node"};
 Base.toString = function () {return "Error";};
 
@@ -20,6 +22,14 @@ Number.precedence = 9000;
 Number.toString = function () {
     return "" + this.value;
 };
+Number.drawAt = function (paper,x,y) {
+    var t = paper.text(x,y,""+this.value);
+    t.attr(FONTATTRS);
+    var bbox = t.getBBox();
+    t.translate(bbox.width/2,bbox.height/2);
+    bbox = t.getBBox()
+    return bbox;
+};
 
 var Atom = Object.create(Base);
 Atom.type = "Atom";
@@ -27,6 +37,14 @@ Atom.value = "a"
 Atom.precedence = 9000;
 Atom.toString = function () {
     return this.value;
+};
+Atom.drawA = function (paper,x,y) {
+    var t = paper.text(x,y,""+this.value);
+    t.attr(FONTATTRS);
+    var bbox = t.getBBox();
+    t.translate(bbox.width/2,bbox.height/2);
+    bbox = t.getBBox()
+    return bbox;
 };
 
 function makeNumber (n) {
@@ -54,6 +72,24 @@ BinaryOp.combine = function () {
     }
     return result;
 }; 
+BinaryOp.drawAt = function (paper,x,y) {
+    var leftBBox = this.left.drawAt(paper,x,y)
+    
+    var op = paper.text(x+leftBBox.width,y,this.text);
+    op.attr(FONTATTRS);
+    var opBBox = op.getBBox();
+    op.translate(opBBox.width/2,opBBox.height/2)
+    op.attr({fill: "#F00"});
+    console.log(opBBox);
+    opBBox = op.getBBox();
+
+    var rightBBox = this.right.drawAt(paper,x+leftBBox.width+opBBox.width,y);
+    var width = leftBBox.width + opBBox.width + rightBBox.width;
+    var height = leftBBox.height + opBBox.height + rightBBox.height;
+
+    return {x:x,y:y,x2:x+width,y2:y+height,width:width,height:height};
+};
+
 BinaryOp.text = "op";
 BinaryOp.toString = function () {
     var result = "";
