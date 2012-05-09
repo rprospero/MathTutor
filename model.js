@@ -14,12 +14,19 @@ var Base = {type: "Node"};
 Base.toString = function () {return "Error";};
 
 var Number = Object.create(Base);
-
 Number.type = "Number";
 Number.value = 0;
 Number.precedence = 9000;
 Number.toString = function () {
     return "" + this.value;
+};
+
+var Atom = Object.create(Base);
+Atom.type = "Atom";
+Atom.value = "a"
+Atom.precedence = 9000;
+Atom.toString = function () {
+    return this.value;
 };
 
 function makeNumber (n) {
