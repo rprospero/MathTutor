@@ -4,6 +4,8 @@
     </script>
     <script src="model.js">
     </script>
+    <script src="infix.js">
+    </script>
   </head>
   <body>
     <div id="can"></div>
@@ -11,9 +13,7 @@
       var paper = Raphael("can",512,512);
       var t = paper.text(0,0,"Testing");
       t.translate(t.getBBox().width/2,t.getBBox().height/2);
-      var num = Object.create(Plus);
-      num.left = makeNumber(50);
-      num.right = makeNumber(-400);
+      var num = makeExpr("3 * ( 2 + 7 ) + 7 * ( 3 + 2 + 6 )");
       num.drawAt(paper,50,50);
     </script>
   </body>

@@ -7,13 +7,15 @@ function fromInfix (string) {
     stack = [];
     postfix = [];
 
-    
+
+    console.log(tokens);
 
     tokens = string.split(" ");
 
     var i = 0;
 
     while (i < tokens.length) {	
+	console.log(postfix);
 	t = tokens[i];
 	switch (t) {
 	case "(":
@@ -52,5 +54,35 @@ function fromInfix (string) {
 	}
 	i += 1;
     }
-    return postfix.concat(stack.reverse());
+    postfix.concat(stack.reverse());
+    return postfix;
+};
+
+function makeExpr (string) {
+    var post = fromInfix(string);
+    console.log(post);
+
+    var stack = [];
+    post.reverse();
+
+    while (post.length > 0) {
+	head = post.pop();
+	switch (head) {
+	case "+":
+	    var p = Object.create(Plus);
+	    p.left = stack.pop();
+	    p.right = stack.pop();
+	    stack.push(p);
+	    break;
+	case "*":
+	    var m = Object.create(Mult);
+	    m.left = stack.pop();
+	    m.right = stack.pop();
+	    stack.push(m);
+	    break;
+	default:
+	    stack.push(makeNumber(head));
+	}
+    }
+    return stack.pop();
 };
