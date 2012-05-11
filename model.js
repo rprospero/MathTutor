@@ -73,22 +73,52 @@ BinaryOp.combine = function () {
     return result;
 }; 
 BinaryOp.drawAt = function (paper,x,y) {
-    var leftBBox = this.left.drawAt(paper,x,y)
+    if (this.left.precedence < this.precedence) {
+	var leftBBox = drawWithParentheses(this.left,paper,x,y);
+    } else {
+	var leftBBox = this.left.drawAt(paper,x,y)
+    }
     
     var op = paper.text(x+leftBBox.width,y,this.text);
     op.attr(FONTATTRS);
     var opBBox = op.getBBox();
     op.translate(opBBox.width/2,opBBox.height/2)
     op.attr({fill: "#F00"});
-    console.log(opBBox);
     opBBox = op.getBBox();
 
-    var rightBBox = this.right.drawAt(paper,x+leftBBox.width+opBBox.width,y);
+    if (this.right.precedence < this.precedence) {
+	var rightBBox = drawWithParentheses(this.right,paper,
+					    x+leftBBox.width+opBBox.width,
+					    y);
+    } else {
+	var rightBBox = this.right.drawAt(paper,
+					  x+leftBBox.width+opBBox.width,y);
+    }
     var width = leftBBox.width + opBBox.width + rightBBox.width;
     var height = leftBBox.height + opBBox.height + rightBBox.height;
 
     return {x:x,y:y,x2:x+width,y2:y+height,width:width,height:height};
 };
+
+function drawWithParentheses (ob,paper,x,y) {
+    var left = paper.text(x,y,"(");
+    left.attr(FONTATTRS);
+    var leftBBox = left.getBBox();
+    left.translate(leftBBox.width/2,leftBBox.height/2);
+    
+    var mainbbox = ob.drawAt(paper,x+leftBBox.width,y);
+
+    var right = paper.text(x+leftBBox.width+mainbbox.width,y,")");
+    right.attr(FONTATTRS);
+    var rightBBox = right.getBBox();
+    right.translate(rightBBox.width/2,rightBBox.height/2);
+    rightBBox = right.getBBox();
+
+    return {x:x,y:y,x2:rightBBox.x2,
+	    y2:rightBBox.y2,
+	    width:rightBBox.x2-x,
+	    height:rightBBox.y2-y};
+}
 
 BinaryOp.text = "op";
 BinaryOp.toString = function () {
