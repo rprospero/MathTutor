@@ -1,29 +1,27 @@
+"use strict";
 
 function isNumber (n) {
     return !isNaN(parseFloat(n)) && iaFinite(n);
 };
 
 function fromInfix (string) {
-    stack = [];
-    postfix = [];
+    var stack = [];
+    var postfix = [];
 
 
-    console.log(tokens);
-
-    tokens = string.split(" ");
+    var tokens = string.split(" ");
 
     var i = 0;
 
     while (i < tokens.length) {	
-	console.log(postfix);
-	t = tokens[i];
+	var t = tokens[i];
 	switch (t) {
 	case "(":
 	    stack.push(t);
 	    break;
 	case ")":
 	    while(stack.length > 0) {
-		head = stack.pop();
+		var head = stack.pop();
 		if (head !== "(") {
 		    postfix.push(head);
 		} else{
@@ -38,7 +36,7 @@ function fromInfix (string) {
 	case "+":
 	case "-":
 	    while(stack.length > 0) {
-		head = stack.pop();
+		var head = stack.pop();
 		if (head === "*" || head === "/" || head === "^") {
 		    postfix.push(head);
 		} else {
@@ -54,8 +52,7 @@ function fromInfix (string) {
 	}
 	i += 1;
     }
-    postfix.concat(stack.reverse());
-    return postfix;
+    return postfix.concat(stack.reverse());
 };
 
 function makeExpr (string) {
@@ -66,7 +63,7 @@ function makeExpr (string) {
     post.reverse();
 
     while (post.length > 0) {
-	head = post.pop();
+	var head = post.pop();
 	switch (head) {
 	case "+":
 	    var p = Object.create(Plus);
