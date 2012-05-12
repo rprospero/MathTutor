@@ -30,6 +30,11 @@ Number.drawAt = function (paper,x,y) {
     bbox = t.getBBox()
     return bbox;
 };
+Number.create = function (n) {
+    var result = Object.create(Number);
+    result.value = n;
+    return result;
+};
 
 var Atom = Object.create(Base);
 Atom.type = "Atom";
@@ -45,12 +50,6 @@ Atom.drawA = function (paper,x,y) {
     t.translate(bbox.width/2,bbox.height/2);
     bbox = t.getBBox()
     return bbox;
-};
-
-function makeNumber (n) {
-    var result = Object.create(Number);
-    result.value = n;
-    return result;
 };
 
 var BinaryOp = Object.create(Base);
