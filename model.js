@@ -65,18 +65,19 @@ BinaryOp.combine = function () {
                   node: this};
     if (this.left.type === "Number" && this.right.type === "Number") {
         var x = Object.create(Number);
-        x.value = this.op(this.left.value,this.right.value);
+        x.value = this.op(parseFloat(this.left.value),
+			  parseFloat(this.right.value));
         result.node = x;
         result.success = true;
         result.message = "Combined";
     }
     return result;
 }; 
-BinaryOp.drawAt = function (paper,x,y) {
+BinaryOp.drawAt = function (paper,x,y,head) {
     if (this.left.precedence < this.precedence) {
-	var leftBBox = drawWithParentheses(this.left,paper,x,y);
+	var leftBBox = drawWithParentheses(this.left,paper,x,y,head);
     } else {
-	var leftBBox = this.left.drawAt(paper,x,y)
+	var leftBBox = this.left.drawAt(paper,x,y,head)
     }
     
     var op = paper.text(x+leftBBox.width,y,this.text);
@@ -89,24 +90,59 @@ BinaryOp.drawAt = function (paper,x,y) {
     if (this.right.precedence < this.precedence) {
 	var rightBBox = drawWithParentheses(this.right,paper,
 					    x+leftBBox.width+opBBox.width,
-					    y);
+					    y,head);
     } else {
 	var rightBBox = this.right.drawAt(paper,
-					  x+leftBBox.width+opBBox.width,y);
+					  x+leftBBox.width+opBBox.width,y,head);
     }
     var width = leftBBox.width + opBBox.width + rightBBox.width;
     var height = leftBBox.height + opBBox.height + rightBBox.height;
 
+    //setup Click Handler
+    op.click(combinePoint(head,this,paper,x,y));
+
     return {x:x,y:y,x2:x+width,y2:y+height,width:width,height:height};
 };
 
-function drawWithParentheses (ob,paper,x,y) {
+function combinePoint(parent,pt,paper,x,y,head) {
+    var callback = function () {
+	if (parent.left==pt || parent.right == pt) {
+	    if (parent.left==pt) {
+		var temp = pt.combine();
+		if (temp.success) {
+		    parent.left = temp.node;
+		    parent.left.drawAt(paper,x,y,head);
+		} else {
+		    alert(temp.message);
+		}
+	    } else {
+		var temp = pt.combine();
+		if (temp.success) {
+		    parent.right = temp.node;
+		    parent.right.drawAt(paper,x,y,head);
+		} else {
+		    alert(temp.message);
+		}
+	    }
+	} else{
+	    if (parent.left !== undefined) {
+		combinePoint(parent.left,pt,paper,x,y,head)();
+	    }
+	    if (parent.right !== undefined) {
+		combinePoint(parent.right,pt,paper,x,y,head)();
+	    }
+	};
+    }
+    return callback;
+}
+
+function drawWithParentheses (ob,paper,x,y,head) {
     var left = paper.text(x,y,"(");
     left.attr(FONTATTRS);
     var leftBBox = left.getBBox();
     left.translate(leftBBox.width/2,leftBBox.height/2);
     
-    var mainbbox = ob.drawAt(paper,x+leftBBox.width,y);
+    var mainbbox = ob.drawAt(paper,x+leftBBox.width,y,head);
 
     var right = paper.text(x+leftBBox.width+mainbbox.width,y,")");
     right.attr(FONTATTRS);
