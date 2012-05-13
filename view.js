@@ -39,13 +39,45 @@ EqElement.make = function () {
 	t = this.paper.text(0,0,this.node.text);
 	t.attr(FONTATTRS);
 	t.attr({fill:"F00"});
-	console.log(this.node.text)
     }
 	
     var bbox = t.getBBox();
     t.transform("t"+(bbox.width/2)+","+(bbox.height/2));
-    console.log(t.transform());
     this.elem = t;
+
+    var that = this;
+    t.click(function () {
+	var result = that.node.combine();
+	if (result.success) {
+	    var transform = that.elem.transform();
+	    that.remove();
+
+	    that.node.text = result.node.text;
+	    that.node.value = result.node.value;
+	    that.node.left = result.node.left;
+	    that.node.right = result.node.right;
+	    that.node.precedence = result.node.precedence;
+	    that.node.type = result.node.type;
+
+
+	    var temp = EqElement.create(result.node,that.paper);
+	    temp.elem.transform(transform);
+	    that.elem = temp.elem;
+	} else {
+	    alert(result.message);
+	    console.log(that.node);
+	}
+    });
+}
+
+EqElement.remove = function() {
+    this.elem.remove();
+    if (this.left !== undefined) {
+	this.left.remove();
+    }
+    if (this.right !== undefined) {
+	this.right.remove();
+    }
 }
 
 
