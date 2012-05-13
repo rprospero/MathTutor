@@ -10,8 +10,6 @@ if (typeof Object.create !== 'function') {
     };
 }
 
-var FONTATTRS = {"font-size":45,fill:"#000"};
-
 var Base = {type: "Node"};
 Base.toString = function () {return "Error";};
 
@@ -21,14 +19,6 @@ Number.value = 0;
 Number.precedence = 9000;
 Number.toString = function () {
     return "" + this.value;
-};
-Number.drawAt = function (paper,x,y) {
-    var t = paper.text(x,y,""+this.value);
-    t.attr(FONTATTRS);
-    var bbox = t.getBBox();
-    t.translate(bbox.width/2,bbox.height/2);
-    bbox = t.getBBox()
-    return bbox;
 };
 Number.create = function (n) {
     var result = Object.create(Number);
@@ -42,14 +32,6 @@ Atom.value = "a"
 Atom.precedence = 9000;
 Atom.toString = function () {
     return this.value;
-};
-Atom.drawA = function (paper,x,y) {
-    var t = paper.text(x,y,""+this.value);
-    t.attr(FONTATTRS);
-    var bbox = t.getBBox();
-    t.translate(bbox.width/2,bbox.height/2);
-    bbox = t.getBBox()
-    return bbox;
 };
 
 var BinaryOp = Object.create(Base);

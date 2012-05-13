@@ -67,18 +67,18 @@ function makeExpr (string) {
 	switch (head) {
 	case "+":
 	    var p = Object.create(Plus);
-	    p.left = stack.pop();
 	    p.right = stack.pop();
+	    p.left = stack.pop();
 	    stack.push(p);
 	    break;
 	case "*":
 	    var m = Object.create(Mult);
-	    m.left = stack.pop();
 	    m.right = stack.pop();
+	    m.left = stack.pop();
 	    stack.push(m);
 	    break;
 	default:
-	    stack.push(makeNumber(head));
+	    stack.push(Number.create(head));
 	}
     }
     return stack.pop();
