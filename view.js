@@ -52,6 +52,10 @@ EqElement.make = function () {
 	    var transform = that.elem.transform();
 	    that.remove();
 
+	    //This code is to copy the new reult code into the main
+	    //tree.  Simply resetting that.node doesn't change the
+	    //tree for the parent, so we need to do a copy for right now.
+	    //There must be a better way to do this.
 	    that.node.text = result.node.text;
 	    that.node.value = result.node.value;
 	    that.node.left = result.node.left;
